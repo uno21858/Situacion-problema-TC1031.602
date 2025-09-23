@@ -17,7 +17,6 @@ int main() {
 
     // Para leer y vectorizar los logs
 
-    LogManager::generarArchivoVectorizado("../data/bitacora.txt", "logsRawVectorizado.txt");
-
+LogManager::generarArchivoVectorizado("../bitacora.txt", "../logsRawVectorizado.txt");
     return 0;
 }

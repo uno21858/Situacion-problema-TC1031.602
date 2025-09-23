@@ -39,7 +39,7 @@ void LogManager::generarArchivoVectorizado(const string &archivoOriginal, const 
     }
 
 
-    ofstream salida("../data/" + archivoSalida);
+    ofstream salida(archivoSalida);
     // Debug: borrar despues
     if (!salida.is_open()) {
         cout << "No se pudo crear el archivo " << archivoSalida << endl;
@@ -58,11 +58,11 @@ cout << "Linea " << contador++ << ": " << linea.substr(0,5);
 
             LogManager log(linea);
 
-            salida << log.getMes() << "|"
-                   << log.getDia() << "|"
-                   << log.getHora() << "|"
-                   << log.getIP() << "|"
-                   << log.getPuerto() << "|"
+            salida << log.getMes() << " "
+                   << log.getDia() << " "
+                   << log.getHora() << " "
+                   << log.getIP() << " "
+                   << log.getPuerto() << " "
                    << log.getMensaje() << std::endl;
         }
     }
