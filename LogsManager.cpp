@@ -80,7 +80,7 @@ void LogManager::mostrar() {
 }
 
 
-//Convertir todo a lowercase para evitar problemas con mayúsculas DN-----
+//Convertir para evitar problemas con mayusculas
 string convertirAMinusculas(string texto) {
     transform(texto.begin(), texto.end(), texto.begin(), ::tolower);
     return texto;
