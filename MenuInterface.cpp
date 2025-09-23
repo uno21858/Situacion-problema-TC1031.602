@@ -86,4 +86,3 @@ void MenuInterface::ejecutar() {
 
     } while (opcion != 5);
 }
-

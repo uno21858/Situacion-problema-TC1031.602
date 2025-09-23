@@ -12,8 +12,7 @@
 #define SITUACION_PROBLEMA_TC1031_602_LOGSMANAGER_H
 
 #include <string>
-using namespace  std;
-
+using namespace std;
 
 class LogManager {
 private:
@@ -25,6 +24,7 @@ private:
     string mensaje;
 
 public:
+    LogManager() = default; // por defecto DN-------
 
     LogManager(const string& linea);
 
@@ -40,6 +40,9 @@ public:
 
     // funciopn que convierte el archivo normal al vectorizazdo de igual manera un txt
     static void generarArchivoVectorizado(const string& archivoOriginal, const string& archivoSalida = "logsRawVectorizado.txt");
+
+    // Traduce meses y ordena por fecha con el traductor DN------
+    static void traductor(const string& archivoEntrada, int numEquipo); // una función dentro de LogsManager que se llame "traductor".
 };
 
-#endif //SITUACION_PROBLEMA_TC1031_602_LOGSMANAGER_H
+#endif // SITUACION_PROBLEMA_TC1031_602_LOGSMANAGER_H
