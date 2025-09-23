@@ -16,7 +16,7 @@ int main() {
 */
 
     // Para leer y vectorizar los logs
-
+    //Si es necesario el ../ es referencia q lo busyq en root
 LogManager::generarArchivoVectorizado("../bitacora.txt", "../logsRawVectorizado.txt");
     return 0;
 }
