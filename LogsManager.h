@@ -12,6 +12,7 @@
 #define SITUACION_PROBLEMA_TC1031_602_LOGSMANAGER_H
 
 #include <string>
+#include <vector>
 using namespace std;
 
 class LogManager {
@@ -43,6 +44,14 @@ public:
 
     // Traduce meses y ordena por fecha con el traductor DN------
     static void traductor(const string& archivoEntrada, int numEquipo); // una función dentro de LogsManager que se llame "traductor".
+    
+    // funciones de búsqueda 
+    static vector<LogManager> cargarLogs(const string& archivo);            // Carga un archivo de bitácora a memoria
+    static vector<LogManager> buscarPorIP(const vector<LogManager>& logs, const string& ip);
+    static vector<LogManager> buscarPorPuerto(const vector<LogManager>& logs, int puerto);
+    static vector<LogManager> buscarPorFecha(const vector<LogManager>& logs, const string& mes, int dia);
+    static vector<LogManager> buscarPorMensaje(const vector<LogManager>& logs, const string& palabraClave);
+    static void mostrarResultados(const vector<LogManager>& resultados);
 };
 
 #endif // SITUACION_PROBLEMA_TC1031_602_LOGSMANAGER_H

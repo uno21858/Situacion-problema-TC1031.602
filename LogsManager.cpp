@@ -213,3 +213,79 @@ void LogManager::traductor(const string& rutaArchivoEntrada, int numeroEquipo) {
     archivoSalida.close();
     cout << "Todo bien c: " << nombreArchivoSalida << endl; //Se termina y se guarda
 }
+
+// ===== Implementación de funciones de búsqueda DN------
+
+// Cargar logs desde un archivo 
+vector<LogManager> LogManager::cargarLogs(const string &archivo) {
+    vector<LogManager> logs;
+    ifstream entrada(archivo);
+    if (!entrada.is_open()) { // aqui si no existe el archivo
+        cout << "No se pudo abrir el archivo " << archivo << endl;
+        return logs;
+    }
+
+    string linea; // para leer linea por linea
+    while (getline(entrada, linea)) {
+        if (!linea.empty()) { // evitar lineas vacias
+            LogManager log(linea);
+            logs.push_back(log);
+        }
+    }
+    entrada.close(); // cerrar el archivo
+    return logs;
+}
+
+vector<LogManager> LogManager::buscarPorIP(const vector<LogManager> &logs, const string &ipBuscada) { 
+    vector<LogManager> res;
+    for (const auto &log : logs) {
+        if (log.getIP() == ipBuscada) {
+            res.push_back(log);
+        }
+    }
+    return res;
+}
+
+vector<LogManager> LogManager::buscarPorPuerto(const vector<LogManager> &logs, int puertoBuscado) {
+    vector<LogManager> res;
+    for (const auto &log : logs) {
+        if (log.getPuerto() == puertoBuscado) {
+            res.push_back(log);
+        }
+    }
+    return res;
+}
+
+vector<LogManager> LogManager::buscarPorFecha(const vector<LogManager> &logs, const string &mes, int dia) {
+    vector<LogManager> res;
+    for (const auto &log : logs) {
+        if (convertirAMinusculas(log.getMes()) == convertirAMinusculas(mes) && log.getDia() == dia) {
+            res.push_back(log);
+        }
+    }
+    return res;
+}
+
+vector<LogManager> LogManager::buscarPorMensaje(const vector<LogManager> &logs, const string &palabraClave) {
+    vector<LogManager> res;
+    string needle = convertirAMinusculas(palabraClave);
+    for (const auto &log : logs) {
+        string hay = convertirAMinusculas(log.getMensaje());
+        if (hay.find(needle) != string::npos) {
+            res.push_back(log);
+        }
+    }
+    return res;
+}
+
+void LogManager::mostrarResultados(const vector<LogManager> &resultados) {
+    if (resultados.empty()) {
+        cout << "No se encontraron resultados" << endl;
+        return;
+    }
+    for (const auto &r : resultados) {
+        // reusar el estilo de mostrar()
+        cout << r.getMes() << " " << r.getDia() << " " << r.getHora() << " "
+             << r.getIP() << ":" << r.getPuerto() << " " << r.getMensaje() << endl;
+    }
+}
