@@ -10,29 +10,27 @@
 #include <string>
 
 
-
-
 class MenuInterface {
 private:
     vector<LogManager> logsOrdenados; // se cargan para buscar
     string archivoFuente = "bitacoraOrdenada3.txt"; // por defecto
+    int contadorBusquedas = 0; // contador para numeroBusqueda
+    const int NUMERO_EQUIPO = 3; // numero de equipo
 
 public:
     MenuInterface();
-    ~MenuInterface();
 
     void ejecutar();
     void mostrarOpciones();
     int leerOpcion(int min, int max);
     void hacerBusqueda(int opcion);
 
-    // utilidades nuevas de busqueda
-    void cargarDatos();
-    void busquedaPorIP();
-    void busquedaPorPuerto();
-    void busquedaPorFecha();
-    void busquedaPorMensaje();
+    // Google Search (Respuesta rapida de la IA del navegador)
+    void clearScreen();
 
+    // Funciones para ver si estan en rango de las fechas
+    int validarDia(int dia);
+    string validarMes(string mes);
 };
 
 

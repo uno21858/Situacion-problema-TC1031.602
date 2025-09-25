@@ -6,25 +6,21 @@
 #include "LogsManager.h"
 #include "MenuInterface.h"
 
+
+/*
+ *github https://github.com/uno21858/Situacion-problema-TC1031.602
+ */
+
+
+
 int main() {
     const int NUMERO_EQUIPO = 3; // puse tres por poner no se cual somos la neta pero la tarea dice que se guarda con el numero DN--------
-    /* Probar el menu de seleccion
-    // Debug o pa probar que si jala el selector o menu
-    
 
-    // Por el momento se cicla el menu. osea despues de seleccioar una opcion valida. este
-    // te vuelve a preguntar lo mismo hasya que lo termines. 5
-*/
+    //Agarra y lee el archivo linea por linea y lo ordena DN--------
+    LogManager::genArchivoOrdenado("bitacora.txt", NUMERO_EQUIPO);
 
     MenuInterface menu;
     menu.ejecutar();
-
-    // Para leer y vectorizar los logs
-    //Si es necesario el ../ es referencia q lo busyq en root
-    LogManager::generarArchivoVectorizado("bitacora.txt", "../logsRawVectorizado.txt");
-
-    //Agarra y lee el archivo linea por linea y lo ordena con el traductor DN--------
-    LogManager::traductor("bitacora.txt", 3);
 
     return 0;
 }

@@ -35,49 +35,6 @@ LogManager::LogManager(const string &linea) {
     }
 }
 
-void LogManager::generarArchivoVectorizado(const string &archivoOriginal, const string &archivoSalida) {
-    ifstream entrada(archivoOriginal);
-    // Debugg: borrar despues
-    if (!entrada.is_open()) {
-        cout<< "No se puedo abrir el archivo " << archivoOriginal<< endl;
-        return;
-    }
-
-
-    ofstream salida(archivoSalida);
-    // Debug: borrar despues
-    if (!salida.is_open()) {
-        cout << "No se pudo crear el archivo " << archivoSalida << endl;
-        return;
-    }
-
-    string linea;
-
-    cout << "Haciendo los logs a vector" << endl;
-
-    int contador {0};
-
-    while (getline(entrada, linea)) { // lee linea por linae
-        if (!linea.empty()) {
-//cout << "Linea " << contador++ << ": " << linea.substr(0,5); LO PUSE COMENTADO PARA VER MEJOR LA CONSOLA DN------
-
-            LogManager log(linea);
-
-            salida << log.getMes() << " "
-                   << log.getDia() << " "
-                   << log.getHora() << " "
-                   << log.getIP() << " "
-                   << log.getPuerto() << " "
-                   << log.getMensaje() << std::endl;
-        }
-    }
-    cout << "Se creo el archivo vectorizado: " << archivoSalida << endl;
-}
-
-
-void LogManager::mostrar() {
-    cout << mes<<" " << dia << " " << hora << " " << ip << " " << puerto << " " << mensaje << endl;
-}
 
 
 //Convertir para evitar problemas con mayusculas
@@ -171,7 +128,7 @@ void ordenarRegistrosPorFecha(vector<LogManager>& registros, int inicio, int fin
 }
 
 //  lee ordena y guarda con el traductor DN------
-void LogManager::traductor(const string& rutaArchivoEntrada, int numeroEquipo) {
+void LogManager::genArchivoOrdenado(const string& rutaArchivoEntrada, int numeroEquipo) {
     ifstream archivoEntrada(rutaArchivoEntrada);
     if (!archivoEntrada.is_open()) {
         cout << "pusiste la ruta mal otra vez " << rutaArchivoEntrada << endl;
@@ -236,6 +193,7 @@ vector<LogManager> LogManager::cargarLogs(const string &archivo) {
     return logs;
 }
 
+
 vector<LogManager> LogManager::buscarPorIP(const vector<LogManager> &logs, const string &ipBuscada) { 
     vector<LogManager> res;
     for (const auto &log : logs) {
@@ -245,6 +203,7 @@ vector<LogManager> LogManager::buscarPorIP(const vector<LogManager> &logs, const
     }
     return res;
 }
+
 
 vector<LogManager> LogManager::buscarPorPuerto(const vector<LogManager> &logs, int puertoBuscado) {
     vector<LogManager> res;
@@ -256,6 +215,7 @@ vector<LogManager> LogManager::buscarPorPuerto(const vector<LogManager> &logs, i
     return res;
 }
 
+
 vector<LogManager> LogManager::buscarPorFecha(const vector<LogManager> &logs, const string &mes, int dia) {
     vector<LogManager> res;
     for (const auto &log : logs) {
@@ -265,6 +225,45 @@ vector<LogManager> LogManager::buscarPorFecha(const vector<LogManager> &logs, co
     }
     return res;
 }
+
+// Busqueda por rango de fechas // https://www.geeksforgeeks.org/range-queries-for-frequencies-of-array-elements/
+// D1
+vector<LogManager> LogManager::buscarPorRangoFecha(const vector<LogManager> &logs,
+                                                   const string& mesInicio, int diaInicio,
+                                                   const string& mesFin, int diaFin) {
+    vector<LogManager> res;
+
+    // Convertir a minuscula por si las dudas
+    string mesInicioMin = convertirAMinusculas(mesInicio);
+    string mesFinMin = convertirAMinusculas(mesFin);
+
+    for (const auto &log : logs) {
+        string mesLogMin = convertirAMinusculas(log.getMes());
+
+
+        bool enRango = false;
+
+        if (mesInicioMin == mesFinMin) {
+            // Verirfica los dias
+            if (mesLogMin == mesInicioMin && log.getDia() >= diaInicio && log.getDia() <= diaFin) {
+                enRango = true;
+            }
+        } else {
+            // Verificar meses
+            if (mesLogMin == mesInicioMin && log.getDia() >= diaInicio) {
+                enRango = true;
+            } else if (mesLogMin == mesFinMin && log.getDia() <= diaFin) {
+                enRango = true;
+            }
+        }
+
+        if (enRango) {
+            res.push_back(log);
+        }
+    }
+    return res;
+}
+
 
 vector<LogManager> LogManager::buscarPorMensaje(const vector<LogManager> &logs, const string &palabraClave) {
     vector<LogManager> res;
@@ -278,6 +277,7 @@ vector<LogManager> LogManager::buscarPorMensaje(const vector<LogManager> &logs, 
     return res;
 }
 
+//Mostrar en consola los logs filtraods (DEBUG)
 void LogManager::mostrarResultados(const vector<LogManager> &resultados) {
     if (resultados.empty()) {
         cout << "No se encontraron resultados" << endl;
@@ -288,4 +288,29 @@ void LogManager::mostrarResultados(const vector<LogManager> &resultados) {
         cout << r.getMes() << " " << r.getDia() << " " << r.getHora() << " "
              << r.getIP() << ":" << r.getPuerto() << " " << r.getMensaje() << endl;
     }
+}
+
+//guarda resultados en archivo salidaN-eq#.txt
+//D1
+void LogManager::guardarResultados(const vector<LogManager> &resultados, int numeroBusqueda, int numeroEquipo) {
+    string nombreArchivo = "salida" + to_string(numeroBusqueda) + "-eq" + to_string(numeroEquipo) + ".txt";
+
+    ofstream archivoSalida(nombreArchivo);
+    if (!archivoSalida.is_open()) {
+        cout << "Error: No se pudo crear el archivo " << nombreArchivo << endl;
+        return;
+    }
+
+    // Guardar en formato original (igual que el archivo origen)
+    for (const auto& resultado : resultados) {
+        archivoSalida << resultado.getMes() << " "
+                      << resultado.getDia() << " "
+                      << resultado.getHora() << " "
+                      << resultado.getIP() << ":"
+                      << resultado.getPuerto() << " "
+                      << resultado.getMensaje() << endl;
+    }
+
+    archivoSalida.close();
+    cout << "Resultados guardados en: " << nombreArchivo << " (" << resultados.size() << " registros)" << endl;
 }

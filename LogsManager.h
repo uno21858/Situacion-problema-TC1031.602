@@ -3,10 +3,6 @@
 //
 
 
-/*
- *  Lee los logs del txt.
- *  Seguido los vectoriza y crea otro txt con los logs vectorizados
- */
 
 #ifndef SITUACION_PROBLEMA_TC1031_602_LOGSMANAGER_H
 #define SITUACION_PROBLEMA_TC1031_602_LOGSMANAGER_H
@@ -37,21 +33,28 @@ public:
     int getPuerto() const {return puerto;}
     string getMensaje() const {return mensaje;}
 
-    void mostrar();
 
-    // funciopn que convierte el archivo normal al vectorizazdo de igual manera un txt
-    static void generarArchivoVectorizado(const string& archivoOriginal, const string& archivoSalida = "logsRawVectorizado.txt");
 
     // Traduce meses y ordena por fecha con el traductor DN------
-    static void traductor(const string& archivoEntrada, int numEquipo); // una función dentro de LogsManager que se llame "traductor".
-    
-    // funciones de búsqueda 
+    static void genArchivoOrdenado(const string& archivoEntrada, int numEquipo); // una función dentro de LogsManager
+
+    static vector<LogManager> buscarPorFecha(const vector<LogManager>& logs, const string& mes, int dia);
+    static vector<LogManager> buscarPorRangoFecha(const vector<LogManager>& logs,
+                                                   const string& mesInicio, int diaInicio,
+                                                   const string& mesFin, int diaFin);
+
+
+    // funciones de búsqueda  extra (osea ahorita no se necedutan pero a futuro si)
+
     static vector<LogManager> cargarLogs(const string& archivo);            // Carga un archivo de bitácora a memoria
     static vector<LogManager> buscarPorIP(const vector<LogManager>& logs, const string& ip);
     static vector<LogManager> buscarPorPuerto(const vector<LogManager>& logs, int puerto);
-    static vector<LogManager> buscarPorFecha(const vector<LogManager>& logs, const string& mes, int dia);
     static vector<LogManager> buscarPorMensaje(const vector<LogManager>& logs, const string& palabraClave);
     static void mostrarResultados(const vector<LogManager>& resultados);
+
+    //D1
+    static void guardarResultados(const vector<LogManager>& resultados, int numeroBusqueda, int numeroEquipo);
+
 };
 
 #endif // SITUACION_PROBLEMA_TC1031_602_LOGSMANAGER_H

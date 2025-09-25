@@ -3,32 +3,43 @@
 //
 
 #include "MenuInterface.h"
+#include "LogsManager.h"
 #include <iostream>
+#include <cctype>
 using namespace std;
 
-//TODO: terminar las funciones de estos
+
 MenuInterface::MenuInterface() {
-}
-// destructor
-MenuInterface::~MenuInterface() {
+    // Borra la basura que se tiene en la terminal
+    clearScreen();
+
+    // Cargar los logs ordenados al crear el menu
+    logsOrdenados = LogManager::cargarLogs("bitacoraOrdenada3.txt");
+    cout << "Logs cargados: " << logsOrdenados.size() << " registros" << endl;
 
 }
 
+// Google Search (Respuesta rapida de la IA del navegador)
+void MenuInterface::clearScreen() {
+#ifdef _WIN32 // Check if compiling on Windows
+    system("cls");
+#else // Assume Unix-based system otherwise
+    system("clear");
+#endif
+}
 
 
 
-// Funcion que solamente me muestra las opciones de busqueda de los logs
+// Funcion que solamente me muestra las opciones de busqueda de los logs D1
 void MenuInterface::mostrarOpciones() {
-
     cout<<"\n============== Selecciona la manera en la que se seleccionaran los logs ============== "<< endl;
-    cout << "1. Buscar por IP" << endl;
-    cout << "2. Buscar por puerto" << endl;
-    cout << "3. Buscar por fecha" << endl;
-    cout << "4. Buscar por mensaje" << endl;
-    cout << "5. Salir" << endl;
+    cout << "1. Buscar por fecha especifica" << endl;
+    cout << "2. Buscar por rango de fechas" << endl;
+    cout << "3. Salir" << endl;
 }
 
-// Lee las opciones del menu.
+
+// Lee las opciones del menu. D1
 int MenuInterface::leerOpcion(int min, int max) {
     int opcion{0};
 
@@ -58,82 +69,169 @@ int MenuInterface::leerOpcion(int min, int max) {
     } while (true);
 }
 
-
-//TODO: mandarlo a la opcion de la busqueda de los logs.
-void MenuInterface::hacerBusqueda(int opcion) {
-    switch (opcion) {
-        case 1 : busquedaPorIP(); break;
-        case 2 : busquedaPorPuerto(); break;
-        case 3 : busquedaPorFecha(); break;
-        case 4 : busquedaPorMensaje(); break;
-        default: cout << "Adio (debug)" << endl; break;
+// Validadores de Dias y meses D1
+int MenuInterface::validarDia(int dia) {
+    if (dia >= 1 && dia <= 31) {
+        return dia;
+    } else {
+        cout << "El dia está fuera de rango (1-31)" << endl;
+        return -1;
     }
 }
+
+// D1
+string MenuInterface::validarMes(string mes) {
+    // Convertir mes en minuscula pd: por no saber como hacer eso en un code assigment lo saque mal XD
+    for (char& c : mes) {
+        c = tolower(c);
+    }
+
+    const string mesesValidos[] = {"jan", "feb", "mar", "apr", "may", "jun",
+                                   "jul", "aug", "sep", "oct", "nov", "dec"};
+
+
+
+    for (int i = 0; i < 12; i++) {
+        if (mes == mesesValidos[i]) {
+            return mes;
+        }
+    }
+
+    cout << "Mes inválido. Use formato como 'Jan', 'Feb', etc." << endl;
+    return "";
+}
+
+
+
+// Funcion que manda a lo que debe de hacer seggun se haya escogido D1
+//TODO: en un futuro. separar por opcion de filtrado. esta nomas es de fechas, pero pa ip puerto y demas ps. hacer un menu del menu
+
+void MenuInterface::hacerBusqueda(int opcion) {
+    switch (opcion) {
+        case 1: {
+            // Busqueda por fecha especifica
+            string mes;
+            int dia;
+
+            cout << "\n=== Buscar por fecha especifica ===" << endl;
+
+            // Validar entrada con loop hasta que sea correcta
+            do {
+                cout << "Ingresa el mes y dia separado por un espacio (ej: Sep 11): ";
+                cin >> mes >> dia;
+
+                mes = validarMes(mes);
+                if (mes.empty()) {
+                    continue;
+                }
+
+                dia = validarDia(dia);
+                if (dia == -1) {
+                    continue;
+                }
+                break;
+            } while (true);
+
+            vector<LogManager> resultados = LogManager::buscarPorFecha(logsOrdenados, mes, dia);
+
+            contadorBusquedas++;
+            LogManager::guardarResultados(resultados, contadorBusquedas, NUMERO_EQUIPO);
+
+            cout<<"\nPreciona enter para continuar";
+            cin.ignore(10000, '\n');
+            cin.get();
+            clearScreen();
+            break;
+        }
+        case 2: {
+            // Busqueda por rango de fechas
+            string mesInicio, mesFin;
+            int diaInicio, diaFin;
+
+            cout << "\n=== Buscar por rango de fechas ===" << endl;
+
+            // Validar fecha de inicio
+            do {
+                cout << "Fecha de inicio:" << endl;
+                cout << "Mes y dia de inicio (ej: Sep 2): ";
+                cin >> mesInicio >> diaInicio;
+
+                mesInicio = validarMes(mesInicio);
+                if (mesInicio.empty()) {
+                    continue;
+                }
+
+                diaInicio = validarDia(diaInicio);
+                if (diaInicio == -1) {
+                    continue;
+                }
+
+                break;
+            } while (true);
+
+            // Validar fecha de fin
+            do {
+                cout << "Fecha de fin:" << endl;
+                cout << "Mes y dia final (ej: Oct 5): ";
+                cin >> mesFin >> diaFin;
+
+                mesFin = validarMes(mesFin);
+                if (mesFin.empty()) {
+                    continue;
+                }
+
+                diaFin = validarDia(diaFin);
+                if (diaFin == -1) {
+                    continue;
+                }
+                break;
+
+            } while (true);
+
+            vector<LogManager> resultados = LogManager::buscarPorRangoFecha(logsOrdenados, mesInicio, diaInicio, mesFin, diaFin);
+
+            contadorBusquedas++;
+            LogManager::guardarResultados(resultados, contadorBusquedas, NUMERO_EQUIPO);
+
+            cout<<"\nPreciona enter para continuar";
+            cin.ignore(10000, '\n');
+            cin.get();
+            clearScreen();
+            break;
+        }
+        default:
+            cout << "Adios :3" << endl;
+            break;
+    }
+}
+
+/* Swithch original
+*void MenuInterface::hacerBusqueda(int opcion) {
+switch (opcion) {
+case 1 : cout<< "Busqueda de IP (Debug)"<<endl;
+break;
+case 2 : cout << "Buscar por puerto (debug)" <<endl;
+break;
+case 3 : cout<<"buscar por fecha (debug)" << endl;
+break;
+case 4 : cout <<"Buscar por mensaje (debug" << endl;
+break;
+default: cout << "Adio (debug)" << endl;
+break;
+}
+}
+
+*/
+
 
 
 // FLujo de como se debde de ejecutar lo de la interfaz del menu
 void MenuInterface::ejecutar() {
-    cargarDatos(); // carga datos al iniciar
     int opcion;
     do {
         mostrarOpciones();
-        opcion = leerOpcion(1,5);
+        opcion = leerOpcion(1,3);
         hacerBusqueda(opcion);
 
-    } while (opcion != 5);
+    } while (opcion != 3);
 }
-
-// las funciones nuevas de busqueda manera sencilla, donde se piden los datos y se muestran los resultados
-void MenuInterface::cargarDatos() {
-    // intentar cargar el archivo por defecto
-    logsOrdenados = LogManager::cargarLogs(archivoFuente);
-    if (logsOrdenados.empty()) {
-        cout << "No se pudieron cargar los logs desde " << archivoFuente << endl;
-    } else {
-        cout << "Se cargaron " << logsOrdenados.size() << " logs desde "
-                << archivoFuente << endl;
-    }
-}
-
-void MenuInterface::busquedaPorIP() {
-    string ip;
-    cout << "Introduce la IP a buscar: ";
-    cin >> ip;
-
-    vector<LogManager> resultados = LogManager::buscarPorIP(logsOrdenados, ip);
-    LogManager::mostrarResultados(resultados);
-}
-
-void MenuInterface::busquedaPorPuerto() {
-    int puerto;
-    cout << "Introduce el puerto a buscar: ";
-    cin >> puerto;
-
-    vector<LogManager> resultados = LogManager::buscarPorPuerto(logsOrdenados, puerto);
-    LogManager::mostrarResultados(resultados);
-}
-
-void MenuInterface::busquedaPorFecha() {
-    string mes;
-    int dia;
-    cout << "Introduce el mes (tres letras, ej. jan, feb): ";
-    cin >> mes;
-    cout << "Introduce el dia (numero): ";
-    cin >> dia;
-
-    vector<LogManager> resultados = LogManager::buscarPorFecha(logsOrdenados, mes, dia);
-    LogManager::mostrarResultados(resultados);
-}
-
-void MenuInterface::busquedaPorMensaje() {
-    string palabraClave;
-    cout << "Introduce la palabra clave a buscar en los mensajes: ";
-    cin.ignore(); // limpiar el buffer
-    getline(cin, palabraClave);
-
-    vector<LogManager> resultados = LogManager::buscarPorMensaje(logsOrdenados, palabraClave);
-    LogManager::mostrarResultados(resultados);
-}
-
-
-
