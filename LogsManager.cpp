@@ -201,7 +201,8 @@ vector<LogManager> LogManager::cargarLogs(const string &archivo) {
     return logs;
 }
 
-
+//https://www.w3schools.com/cpp/cpp_ref_vector.asp
+//https://www.w3schools.com/cpp/cpp_vectors.asp
 vector<LogManager> LogManager::buscarPorIP(const vector<LogManager> &logs, const string &ipBuscada) { 
     vector<LogManager> res;
     for (const auto &log : logs) {
