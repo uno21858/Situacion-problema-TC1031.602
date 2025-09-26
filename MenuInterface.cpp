@@ -8,6 +8,7 @@
 using namespace std;
 
 
+// O(n)
 MenuInterface::MenuInterface() {
     // Borra la basura que se tiene en la terminal
     clearScreen();
@@ -39,6 +40,7 @@ void MenuInterface::mostrarOpciones() {
 
 
 // Lee las opciones del menu. D1
+// O(1)
 int MenuInterface::leerOpcion(int min, int max) {
     int opcion{0};
 
@@ -69,6 +71,7 @@ int MenuInterface::leerOpcion(int min, int max) {
 }
 
 // Validadores de Dias y meses D1
+// O(1)
 int MenuInterface::validarDia(int dia) {
     if (dia >= 1 && dia <= 31) {
         return dia;
@@ -79,6 +82,7 @@ int MenuInterface::validarDia(int dia) {
 }
 
 // D1
+// O(n)
 string MenuInterface::validarMes(string mes) {
     // Convertir mes en minuscula pd: por no saber como hacer eso en un code assigment lo saque mal XD
     for (char& c : mes) {
@@ -104,7 +108,7 @@ string MenuInterface::validarMes(string mes) {
 
 // Funcion que manda a lo que debe de hacer seggun se haya escogido D1
 //TODO: en un futuro. separar por opcion de filtrado. esta nomas es de fechas, pero pa ip puerto y demas ps. hacer un menu del menu
-
+// O(n)
 void MenuInterface::hacerBusqueda(int opcion) {
     switch (opcion) {
       /*

@@ -15,6 +15,7 @@
 using namespace std;
 
 
+// O(1)
 LogManager::LogManager(const string &linea) {
 
     stringstream ss(linea);
@@ -37,7 +38,7 @@ LogManager::LogManager(const string &linea) {
 
 
 
-//Convertir para evitar problemas con mayusculas
+// O(n)
 string convertirAMinusculas(string texto) {
     transform(texto.begin(), texto.end(), texto.begin(), ::tolower);
     return texto;
@@ -49,7 +50,7 @@ const string NOMBRES_MESES[13] = {
     "jul", "aug", "sep", "oct", "nov", "dec"
 };
 
-// Convertir los meses de string a número: Ene→1, Feb→2, etc. DN -------
+// O(1)
 int convertirMesANumero(const string& nombreMes) {
     string nombreMesMinusculas = convertirAMinusculas(nombreMes);
     for (int numeroMes = 1; numeroMes <= 12; ++numeroMes) {
@@ -60,7 +61,7 @@ int convertirMesANumero(const string& nombreMes) {
     return 0;
 }
 
-//comparar por fecha DN------
+// O(1)
 bool operator<(const LogManager& logIzquierdo, const LogManager& logDerecho) {
     int mesLogIzq = convertirMesANumero(logIzquierdo.getMes());
     int mesLogDer = convertirMesANumero(logDerecho.getMes());
@@ -70,7 +71,7 @@ bool operator<(const LogManager& logIzquierdo, const LogManager& logDerecho) {
     return logIzquierdo.getHora() < logDerecho.getHora(); // al final la hora
 }
 
-// Fusion para usar merge sort DN-------
+// O(n)
 void fusionarRegistros(vector<LogManager>& registros, int inicio, int medio, int fin) {
     int tamanoIzquierda = medio - inicio + 1;
     int tamanoDerecha = fin - medio;
@@ -111,7 +112,7 @@ void fusionarRegistros(vector<LogManager>& registros, int inicio, int medio, int
     }
 }
 
-// Merge Sort pero interativo mi compu no lo aguanto recursivo https://interviewkickstart.com/blogs/learn/iterative-merge-sort de ahi lo saque DN-------
+// O(n log n)
 void ordenarRegistrosPorFecha(vector<LogManager>& registros, int inicio, int fin) {
     int n = fin - inicio + 1;
 
@@ -127,7 +128,7 @@ void ordenarRegistrosPorFecha(vector<LogManager>& registros, int inicio, int fin
     }
 }
 
-//  lee ordena y guarda con el traductor DN------
+// O(n log n)
 void LogManager::genArchivoOrdenado(const string& rutaArchivoEntrada, int numeroEquipo) {
     ifstream archivoEntrada(rutaArchivoEntrada);
     if (!archivoEntrada.is_open()) {
@@ -228,6 +229,7 @@ vector<LogManager> LogManager::buscarPorFecha(const vector<LogManager> &logs, co
 
 // Busqueda por rango de fechas // https://www.geeksforgeeks.org/range-queries-for-frequencies-of-array-elements/
 // D1
+// O(n)
 vector<LogManager> LogManager::buscarPorRangoFecha(const vector<LogManager> &logs,
                                                    const string& mesInicio, int diaInicio,
                                                    const string& mesFin, int diaFin) {

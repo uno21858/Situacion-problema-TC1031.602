@@ -17,6 +17,7 @@ int main() {
     const int NUMERO_EQUIPO = 4; // puse tres por poner no se cual somos la neta pero la tarea dice que se guarda con el numero DN--------
 
     //Agarra y lee el archivo linea por linea y lo ordena DN--------
+    //O(n log n)
     LogManager::genArchivoOrdenado("bitacora.txt", NUMERO_EQUIPO);
 
     MenuInterface menu;
