@@ -44,13 +44,14 @@ string convertirAMinusculas(string texto) {
     return texto;
 }
 
-// Array con nombres de meses en minúsculas puse todos pero creo que solo se ocupan como 4 pero pues aja DN----------
+// Array con nombres de meses en minúsculas
 const string NOMBRES_MESES[13] = {
     "", "jan", "feb", "mar", "apr", "may", "jun",
     "jul", "aug", "sep", "oct", "nov", "dec"
 };
 
 // O(1)
+//meses de string a numero
 int convertirMesANumero(const string& nombreMes) {
     string nombreMesMinusculas = convertirAMinusculas(nombreMes);
     for (int numeroMes = 1; numeroMes <= 12; ++numeroMes) {
@@ -62,6 +63,7 @@ int convertirMesANumero(const string& nombreMes) {
 }
 
 // O(1)
+//https://www.geeksforgeeks.org/operator-overloading-c/
 bool operator<(const LogManager& logIzquierdo, const LogManager& logDerecho) {
     int mesLogIzq = convertirMesANumero(logIzquierdo.getMes());
     int mesLogDer = convertirMesANumero(logDerecho.getMes());
@@ -72,6 +74,7 @@ bool operator<(const LogManager& logIzquierdo, const LogManager& logDerecho) {
 }
 
 // O(n)
+//https://www.programiz.com/dsa/merge-sort
 void fusionarRegistros(vector<LogManager>& registros, int inicio, int medio, int fin) {
     int tamanoIzquierda = medio - inicio + 1;
     int tamanoDerecha = fin - medio;
@@ -113,6 +116,8 @@ void fusionarRegistros(vector<LogManager>& registros, int inicio, int medio, int
 }
 
 // O(n log n)
+//https://www.geeksforgeeks.org/dsa/iterative-merge-sort/
+//Merge Sort interativo
 void ordenarRegistrosPorFecha(vector<LogManager>& registros, int inicio, int fin) {
     int n = fin - inicio + 1;
 
@@ -129,6 +134,8 @@ void ordenarRegistrosPorFecha(vector<LogManager>& registros, int inicio, int fin
 }
 
 // O(n log n)
+//https://cplusplus.com/doc/tutorial/files/
+//
 void LogManager::genArchivoOrdenado(const string& rutaArchivoEntrada, int numeroEquipo) {
     ifstream archivoEntrada(rutaArchivoEntrada);
     if (!archivoEntrada.is_open()) {
@@ -139,7 +146,7 @@ void LogManager::genArchivoOrdenado(const string& rutaArchivoEntrada, int numero
     vector<LogManager> registrosBitacora;
     string lineaLeida;
 
-    //cout << "ordenando " << endl; nomas era para vwer si servia igual lo dejo para futuras pruebas DN------------
+    //cout << "ordenando " << endl; para pruebas
     while (getline(archivoEntrada, lineaLeida)) {
         if (!lineaLeida.empty()) {
             LogManager registroActual(lineaLeida);
@@ -148,14 +155,14 @@ void LogManager::genArchivoOrdenado(const string& rutaArchivoEntrada, int numero
     }
     archivoEntrada.close(); //se cierra el boitacora.txt
 
-   // cout << "Ordenando por fecha " << registrosBitacora.size() << endl; iagual esta es provicional se deja para futuras pruebas DN----------------
+   // cout << "Ordenando por fecha " << registrosBitacora.size() << endl;
     ordenarRegistrosPorFecha(registrosBitacora, 0, registrosBitacora.size() - 1);
 
     string nombreArchivoSalida = "bitacoraOrdenada" + to_string(numeroEquipo) + ".txt";
     ofstream archivoSalida(nombreArchivoSalida);
 
     if (!archivoSalida.is_open()) {
-        cout << "algo hiciste mal " << nombreArchivoSalida << endl;
+        cout << "algo salio mal " << nombreArchivoSalida << endl;
         return;
     }
 
