@@ -5,7 +5,6 @@
 #include "MenuInterface.h"
 #include "LogsManager.h"
 #include <iostream>
-#include <cctype>
 using namespace std;
 
 
@@ -33,9 +32,9 @@ void MenuInterface::clearScreen() {
 // Funcion que solamente me muestra las opciones de busqueda de los logs D1
 void MenuInterface::mostrarOpciones() {
     cout<<"\n============== Selecciona la manera en la que se seleccionaran los logs ============== "<< endl;
-    cout << "1. Buscar por fecha especifica" << endl;
-    cout << "2. Buscar por rango de fechas" << endl;
-    cout << "3. Salir" << endl;
+    //cout << "1. Buscar por fecha especifica" << endl;
+    cout << "1. Buscar por rango de fechas" << endl;
+    cout << "2. Salir" << endl;
 }
 
 
@@ -108,6 +107,7 @@ string MenuInterface::validarMes(string mes) {
 
 void MenuInterface::hacerBusqueda(int opcion) {
     switch (opcion) {
+      /*
         case 1: {
             // Busqueda por fecha especifica
             string mes;
@@ -137,13 +137,16 @@ void MenuInterface::hacerBusqueda(int opcion) {
             contadorBusquedas++;
             LogManager::guardarResultados(resultados, contadorBusquedas, NUMERO_EQUIPO);
 
+            //modo interactivo
             cout<<"\nPreciona enter para continuar";
             cin.ignore(10000, '\n');
             cin.get();
             clearScreen();
+
             break;
         }
-        case 2: {
+    */
+        case 1: {
             // Busqueda por rango de fechas
             string mesInicio, mesFin;
             int diaInicio, diaFin;
@@ -153,7 +156,7 @@ void MenuInterface::hacerBusqueda(int opcion) {
             // Validar fecha de inicio
             do {
                 cout << "Fecha de inicio:" << endl;
-                cout << "Mes y dia de inicio (ej: Sep 2): ";
+                cout << "Mes y dia de inicio (ej: Sep 11): ";
                 cin >> mesInicio >> diaInicio;
 
                 mesInicio = validarMes(mesInicio);
@@ -193,10 +196,12 @@ void MenuInterface::hacerBusqueda(int opcion) {
             contadorBusquedas++;
             LogManager::guardarResultados(resultados, contadorBusquedas, NUMERO_EQUIPO);
 
-            cout<<"\nPreciona enter para continuar";
-            cin.ignore(10000, '\n');
-            cin.get();
-            clearScreen();
+            // modo interacitvo
+            // cout<<"\nPreciona enter para continuar";
+            // cin.ignore(10000, '\n');
+            // cin.get();
+            // clearScreen();
+
             break;
         }
         default:
@@ -230,8 +235,8 @@ void MenuInterface::ejecutar() {
     int opcion;
     do {
         mostrarOpciones();
-        opcion = leerOpcion(1,3);
+        opcion = leerOpcion(1,2);
         hacerBusqueda(opcion);
 
-    } while (opcion != 3);
+    } while (opcion != 2);
 }

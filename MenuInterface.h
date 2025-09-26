@@ -15,7 +15,7 @@ private:
     vector<LogManager> logsOrdenados; // se cargan para buscar
     string archivoFuente = "bitacoraOrdenada3.txt"; // por defecto
     int contadorBusquedas = 0; // contador para numeroBusqueda
-    const int NUMERO_EQUIPO = 3; // numero de equipo
+    const int NUMERO_EQUIPO = 4; // numero de equipo
 
 public:
     MenuInterface();
