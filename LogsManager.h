@@ -33,28 +33,8 @@ public:
     int getPuerto() const {return puerto;}
     string getMensaje() const {return mensaje;}
 
-
-
-    // Traduce meses y ordena por fecha por medio de Merge Sort
-    //https://cplusplus.com/doc/tutorial/files/
-    //https://www.geeksforgeeks.org/cpp/cpp-program-for-merge-sort/
-    static void genArchivoOrdenado(const string& archivoEntrada, int numEquipo);
-
-    static vector<LogManager> buscarPorFecha(const vector<LogManager>& logs, const string& mes, int dia);
-    static vector<LogManager> buscarPorRangoFecha(const vector<LogManager>& logs,
-                                                   const string& mesInicio, int diaInicio,
-                                                   const string& mesFin, int diaFin);
-
-
-    // funciones de búsqueda  extra (osea ahorita no se necedutan pero a futuro si)
-
-    static vector<LogManager> cargarLogs(const string& archivo);            // Carga un archivo de bitácora a memoria
+    static vector<LogManager> cargarLogs(const string& archivo);
     static vector<LogManager> buscarPorIP(const vector<LogManager>& logs, const string& ip);
-    static vector<LogManager> buscarPorPuerto(const vector<LogManager>& logs, int puerto);
-    static vector<LogManager> buscarPorMensaje(const vector<LogManager>& logs, const string& palabraClave);
-    static void mostrarResultados(const vector<LogManager>& resultados);
-
-    //D1
     static void guardarResultados(const vector<LogManager>& resultados, int numeroBusqueda, int numeroEquipo);
 
 };

@@ -11,15 +11,9 @@
  *github https://github.com/uno21858/Situacion-problema-TC1031.602
  */
 
-
+// TODO: agregar ps todo de linked List
 
 int main() {
-    const int NUMERO_EQUIPO = 4;
-
-    //lee el archivo linea por linea y lo ordena
-    //O(n log n)
-    LogManager::genArchivoOrdenado("bitacora.txt", NUMERO_EQUIPO);
-
     MenuInterface menu;
     menu.ejecutar();
 

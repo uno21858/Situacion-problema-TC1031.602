@@ -24,13 +24,7 @@ public:
     void mostrarOpciones();
     int leerOpcion(int min, int max);
     void hacerBusqueda(int opcion);
-
-    // Google Search (Respuesta rapida de la IA del navegador)
     void clearScreen();
-
-    // Funciones para ver si estan en rango de las fechas
-    int validarDia(int dia);
-    string validarMes(string mes);
 };
 
 
