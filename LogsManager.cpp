@@ -154,6 +154,7 @@ void LogManager::ordenarPorIP(MyLinkedList<LogManager> &logs) {
     ordenarRegistrosPorIP(logs, 0, logs.length() - 1);
 }
 
+
 void LogManager::guardarLogsOrdenadosIP(const MyLinkedList<LogManager> &logs, int numeroEquipo) {
     string nombreArchivo = "bitacoraOrdenadaIP-Eq" + to_string(numeroEquipo) + ".txt";
     ofstream archivoSalida(nombreArchivo);
