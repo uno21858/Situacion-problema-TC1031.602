@@ -8,7 +8,7 @@
 #define SITUACION_PROBLEMA_TC1031_602_LOGSMANAGER_H
 
 #include <string>
-#include <vector>
+#include "MyLinkedList.h"
 using namespace std;
 
 class LogManager {
@@ -33,9 +33,16 @@ public:
     int getPuerto() const {return puerto;}
     string getMensaje() const {return mensaje;}
 
-    static vector<LogManager> cargarLogs(const string& archivo);
-    static vector<LogManager> buscarPorIP(const vector<LogManager>& logs, const string& ip);
-    static void guardarResultados(const vector<LogManager>& resultados, int numeroBusqueda, int numeroEquipo);
+    // Comparar IPs jerárquicamente (###.###.###.###:puerto)
+    bool compararPorIP(const LogManager& otro) const;
+
+    static MyLinkedList<LogManager> cargarLogs(const string& archivo);
+    static void guardarResultados(const MyLinkedList<LogManager>& resultados, int numeroBusqueda, int numeroEquipo);
+
+    // Funciones para ordenamiento por IP usando lista enlazada
+    static void ordenarPorIP(MyLinkedList<LogManager>& logs);
+    static void guardarLogsOrdenadosIP(const MyLinkedList<LogManager>& logs, int numeroEquipo);
+    static MyLinkedList<LogManager> buscarRangoIP(const MyLinkedList<LogManager>& logs, const string& ipInicio, const string& ipFin);
 
 };
 
