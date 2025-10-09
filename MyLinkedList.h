@@ -7,6 +7,7 @@
 #include <iostream>
 using namespace std;
 
+// T vendria siendo como un tipo comodin, puede ser int string y demas
 template<typename T>
 struct MyNodoLL {
     T data;
@@ -34,7 +35,7 @@ public:
         this->size = 0;
     }
 
-    // Complejidad: O(n) - Copy constructor
+    // Complejidad: O(n)
     MyLinkedList(const MyLinkedList &other) {
         this->head = this->tail = nullptr;
         this->size = 0;
@@ -46,7 +47,7 @@ public:
         }
     }
 
-    // Complejidad: O(n) - Copy assignment operator
+    // Complejidad: O(n)
     MyLinkedList &operator=(const MyLinkedList &other) {
         if (this != &other) {
             while (!isEmpty()) {
