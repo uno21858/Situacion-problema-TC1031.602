@@ -14,7 +14,7 @@ MenuInterface::MenuInterface() {
     clearScreen();
 
     // Cargar los logs ordenados al crear el menu
-    logsOrdenados = LogManager::cargarLogs("bitacoraOrdenada3.txt");
+    logsOrdenados = LogManager::cargarLogs("bitacoraOrdenada4.txt");
     cout << "Logs cargados: " << logsOrdenados.size() << " registros" << endl;
 
 }
