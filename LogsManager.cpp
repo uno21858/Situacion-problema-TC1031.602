@@ -4,12 +4,18 @@
 
 #include "LogsManager.h"
 
-#include <fstream> //https://www.w3schools.com/cpp/ref_fstream_fstream.asp
+#include <fstream>
 #include <iostream>
-#include <sstream> // https://www.geeksforgeeks.org/cpp/stringstream-c-applications/
+#include <sstream>
 
 
 using namespace std;
+
+// Declaraciones de funciones auxiliares para merge sort
+MyNodoLL<LogManager>* obtenerMitad(MyNodoLL<LogManager>* cabeza);
+MyNodoLL<LogManager>* mezclarDosListas(MyNodoLL<LogManager>* izquierda, MyNodoLL<LogManager>* derecha);
+MyNodoLL<LogManager>* mergeSortRecursivo(MyNodoLL<LogManager>* cabeza);
+
 
 // O(1)
 LogManager::LogManager(const string &linea) {
@@ -35,7 +41,6 @@ LogManager::LogManager(const string &linea) {
 }
 
 // O(1) - Comparar IPs con jerarquia
-// https://www.geeksforgeeks.org/c/scanf-and-fscanf-in-c/
 bool LogManager::compararPorIP(const LogManager &otro) const {
     int octeto1, octeto2, octeto3, octeto4;
     int otroOcteto1, otroOcteto2, otroOcteto3, otroOcteto4;
@@ -53,7 +58,6 @@ bool LogManager::compararPorIP(const LogManager &otro) const {
 
 
 // Cargar logs desde un archivo usando linked list
-// https://www.geeksforgeeks.org/data-structures/linked-list/
 MyLinkedList<LogManager> LogManager::cargarLogs(const string &archivo) {
     MyLinkedList<LogManager> logs;
     ifstream entrada(archivo);
@@ -73,87 +77,71 @@ MyLinkedList<LogManager> LogManager::cargarLogs(const string &archivo) {
     return logs;
 }
 
-// O(n) - Merge Sort
-// https://www.programiz.com/dsa/merge-sort
-void fusionarRegistros(MyLinkedList<LogManager>& registros, int inicio, int medio, int fin) {
-    int tamanoIzquierda = medio - inicio + 1;
-    int tamanoDerecha = fin - medio;
 
-    MyLinkedList<LogManager> subarregloIzquierdo;
-    MyLinkedList<LogManager> subarregloDerecho;
+// Encontrar el nodo del medio usando tecnica tortuga conejo
+// ME insipire en el Leetcode # 141 142 y otros
+MyNodoLL<LogManager>* obtenerMitad(MyNodoLL<LogManager>* cabeza) {
+    if (cabeza == nullptr) return nullptr;
 
-    // Copiar datos a las listas temporales
-    MyNodoLL<LogManager>* current = registros.head;
-    for (int i = 0; i < inicio; i++) {
-        current = current->next;
+    MyNodoLL<LogManager>* lento = cabeza; // tortuga: este solamente avanza 1
+    MyNodoLL<LogManager>* rapido = cabeza->next; //conejo: avanza 1 mas q la tortuga
+
+
+    while (rapido != nullptr && rapido->next != nullptr) {
+        lento = lento->next;
+        rapido = rapido->next->next;
     }
 
-    for (int i = 0; i < tamanoIzquierda; ++i) {
-        subarregloIzquierdo.insertLast(current->data);
-        current = current->next;
-    }
-    for (int j = 0; j < tamanoDerecha; ++j) {
-        subarregloDerecho.insertLast(current->data);
-        current = current->next;
+    return lento;
+}
+
+// Mezcla dos listas ordenadas en una sola **Garcias Lepe**
+MyNodoLL<LogManager>* mezclarDosListas(MyNodoLL<LogManager>* izquierda,
+                                       MyNodoLL<LogManager>* derecha) {
+    if (izquierda == nullptr) return derecha;
+    if (derecha == nullptr) return izquierda;
+
+    MyNodoLL<LogManager>* resultado = nullptr;
+
+    if (izquierda->data.compararPorIP(derecha->data)) {
+        resultado = izquierda;
+        resultado->next = mezclarDosListas(izquierda->next, derecha);
+    } else {
+        resultado = derecha;
+        resultado->next = mezclarDosListas(izquierda, derecha->next);
     }
 
-    int indiceIzquierdo = 0, indiceDerecho = 0, indicePrincipal = inicio;
+    return resultado;
+}
 
-    current = registros.head;
-    for (int i = 0; i < inicio; i++) {
-        current = current->next;
+MyNodoLL<LogManager>* mergeSortRecursivo(MyNodoLL<LogManager>* cabeza) {
+    if (cabeza == nullptr || cabeza->next == nullptr) {
+        return cabeza;
     }
 
-    while (indiceIzquierdo < tamanoIzquierda && indiceDerecho < tamanoDerecha) {
-        if (subarregloIzquierdo.getAt(indiceIzquierdo).compararPorIP(subarregloDerecho.getAt(indiceDerecho))) {
-            current->data = subarregloIzquierdo.getAt(indiceIzquierdo);
-            ++indiceIzquierdo;
-        } else {
-            current->data = subarregloDerecho.getAt(indiceDerecho);
-            ++indiceDerecho;
-        }
-        current = current->next;
-        ++indicePrincipal;
-    }
+    MyNodoLL<LogManager>* mitad = obtenerMitad(cabeza);
+    MyNodoLL<LogManager>* siguienteDeMitad = mitad->next;
+    mitad->next = nullptr;
 
-    while (indiceIzquierdo < tamanoIzquierda) {
-        current->data = subarregloIzquierdo.getAt(indiceIzquierdo);
-        ++indiceIzquierdo;
-        current = current->next;
-        ++indicePrincipal;
-    }
+    MyNodoLL<LogManager>* izquierdaOrdenada = mergeSortRecursivo(cabeza);
+    MyNodoLL<LogManager>* derechaOrdenada = mergeSortRecursivo(siguienteDeMitad);
 
-    while (indiceDerecho < tamanoDerecha) {
-        current->data = subarregloDerecho.getAt(indiceDerecho);
-        ++indiceDerecho;
-        current = current->next;
-        ++indicePrincipal;
-    }
+    return mezclarDosListas(izquierdaOrdenada, derechaOrdenada);
 }
 
 
-// O(n log n) - Merge Sort iterativo
-// https://www.geeksforgeeks.org/dsa/iterative-merge-sort/
-void ordenarRegistrosPorIP(MyLinkedList<LogManager>& registros, int inicio, int fin) {
-    int n = fin - inicio + 1;
-
-    for (int tamano = 1; tamano < n; tamano *= 2) {
-        for (int izquierda = inicio; izquierda <= fin; izquierda += 2 * tamano) {
-            int medio = min(izquierda + tamano - 1, fin);
-            int derecha = min(izquierda + 2 * tamano - 1, fin);
-
-            if (medio < derecha) {
-                fusionarRegistros(registros, izquierda, medio, derecha);
-            }
-        }
-    }
-}
-
-void LogManager::ordenarPorIP(MyLinkedList<LogManager> &logs) {
+void LogManager::ordenarPorIP(MyLinkedList<LogManager>& logs) {
     if (logs.isEmpty() || logs.length() <= 1) return;
-    ordenarRegistrosPorIP(logs, 0, logs.length() - 1);
-}
 
+    logs.head = mergeSortRecursivo(logs.head);
+
+    // Actualizar tail
+    MyNodoLL<LogManager>* actual = logs.head;
+    while (actual->next != nullptr) {
+        actual = actual->next;
+    }
+    logs.tail = actual;
+}
 
 void LogManager::guardarLogsOrdenadosIP(const MyLinkedList<LogManager> &logs, int numeroEquipo) {
     string nombreArchivo = "bitacoraOrdenadaIP-Eq" + to_string(numeroEquipo) + ".txt";
@@ -181,7 +169,6 @@ void LogManager::guardarLogsOrdenadosIP(const MyLinkedList<LogManager> &logs, in
 }
 
 // O(n) - Buscar rango de IPs en la linked list
-// https://www.geeksforgeeks.org/search-an-element-in-a-linked-list-iterative-and-recursive/
 MyLinkedList<LogManager> LogManager::buscarRangoIP(const MyLinkedList<LogManager> &logs, const string &ipInicio, const string &ipFin) {
     MyLinkedList<LogManager> resultados;
 
@@ -207,8 +194,8 @@ MyLinkedList<LogManager> LogManager::buscarRangoIP(const MyLinkedList<LogManager
         current = current->next;
     }
 
-    // Agregar IPs dentro del rango
-    while (current != nullptr && (current->data.compararPorIP(ipFinTemp) || !ipFinTemp.compararPorIP(current->data))) {
+    // Agregar registros mientras estén dentro del rango
+    while (current != nullptr && !ipFinTemp.compararPorIP(current->data)) {
         resultados.insertLast(current->data);
         current = current->next;
     }

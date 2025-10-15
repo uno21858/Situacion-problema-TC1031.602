@@ -44,6 +44,10 @@ public:
     static void guardarLogsOrdenadosIP(const MyLinkedList<LogManager>& logs, int numeroEquipo);
     static MyLinkedList<LogManager> buscarRangoIP(const MyLinkedList<LogManager>& logs, const string& ipInicio, const string& ipFin);
 
+    bool operator<(const LogManager& otro) const {
+        return compararPorIP(otro);
+    }
+
 };
 
 #endif // SITUACION_PROBLEMA_TC1031_602_LOGSMANAGER_H
