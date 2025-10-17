@@ -185,7 +185,7 @@ MyLinkedList<LogManager> LogManager::buscarRangoIP(const MyLinkedList<LogManager
     }
 
     LogManager ipInicioTemp("Jun 1 00:00:00 " + to_string(inicio1) + "." + to_string(inicio2) + "." + to_string(inicio3) + "." + to_string(inicio4) + ":0 -");
-    LogManager ipFinTemp("Jun 1 00:00:00 " + to_string(fin1) + "." + to_string(fin2) + "." + to_string(fin3) + "." + to_string(fin4) + ":0 -");
+    LogManager ipFinTemp("Jun 1 00:00:00 " + to_string(fin1) + "." + to_string(fin2) + "." + to_string(fin3) + "." + to_string(fin4) + ":65535 -");
 
     MyNodoLL<LogManager>* current = logs.head;
 
