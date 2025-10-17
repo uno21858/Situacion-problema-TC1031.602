@@ -5,8 +5,6 @@ set(CMAKE_CXX_STANDARD 14)
 
 add_executable(Situacion_problema_TC1031_602
         main.cpp
-        MenuInterface.h
-        MenuInterface.cpp
         LogsManager.h
         LogsManager.cpp)
 
