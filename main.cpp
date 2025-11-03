@@ -15,7 +15,7 @@ int main() {
     const int NUMERO_EQUIPO = 4;
     int contadorBusquedas = 0;
 
-    // 1. Cargar logs del archivo
+    // 1. Car gar logs del archivo
     cout << "Cargando logs desde bitacora.txt..." << endl;
     MyLinkedList<LogManager> logsOrdenados = LogManager::cargarLogs("bitacora.txt");
     cout << "Logs cargados: " << logsOrdenados.length() << " registros" << endl;
