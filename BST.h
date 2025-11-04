@@ -34,12 +34,11 @@ struct ResultadoTop {
 
 // Árbol BST
 class BST {
-//private:
-public:
+private:
     NodoBST* raiz;
     void recorridoInversoAux(NodoBST* nodo, vector<ResultadoTop>& resultado, int& contador, int N);
 
-//public:
+public:
     BST();
     ~BST();
 
