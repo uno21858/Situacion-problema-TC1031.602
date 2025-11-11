@@ -36,11 +36,12 @@ struct ResultadoTop {
 class BST {
 private:
     NodoBST* raiz;
+    void liberarArbol(NodoBST* nodo);
     void recorridoInversoAux(NodoBST* nodo, vector<ResultadoTop>& resultado, int& contador, int N);
 
 public:
     BST();
-    ~BST() = default;
+    ~BST();
 
     NodoBST* buscar(int frecuencia);
     void actualizarNodo(NodoBST* nodo, const string& ip);

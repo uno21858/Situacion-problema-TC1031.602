@@ -6,7 +6,9 @@ set(CMAKE_CXX_STANDARD 14)
 add_executable(Situacion_problema_TC1031_602
         main.cpp
         LogsManager.h
-        LogsManager.cpp)
+        LogsManager.cpp
+        BST.cpp
+        main_test_BST.cpp)
 
 
 # el cmkae list hace que puedas ejecutar el codigo con el boton de play

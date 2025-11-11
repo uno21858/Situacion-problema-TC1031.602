@@ -9,6 +9,20 @@ BST::BST() {
     raiz = nullptr;
 }
 
+BST::~BST() {
+    liberarArbol(raiz);
+    raiz = nullptr;
+}
+
+void BST::liberarArbol(NodoBST* nodo) {
+    if (nodo == nullptr) {
+        return;
+    }
+    liberarArbol(nodo->izq);
+    liberarArbol(nodo->der);
+    delete nodo;
+}
+
 void BST::actualizarNodo(NodoBST* nodo, const string& ip) {
     nodo->ips.push_back(ip);
 }
@@ -36,27 +50,26 @@ NodoBST* BST::buscar(int frecuencia) {
 }
 
 void BST::crearNodo(int frecuencia, const string& ip) {
-    // Si ta vacio el arbol
     if (raiz == nullptr) {
         raiz = new NodoBST(frecuencia, ip);
         return;
     }
 
-    // Buscar un lugar
     NodoBST* actual = raiz;
+    bool insertado = false;
 
-    while (true) {
+    while (!insertado) {
         if (frecuencia < actual->frecuencia) {
             if (actual->izq == nullptr) {
                 actual->izq = new NodoBST(frecuencia, ip);
-                return;
+                insertado = true;
             } else {
                 actual = actual->izq;
             }
         } else {
             if (actual->der == nullptr) {
                 actual->der = new NodoBST(frecuencia, ip);
-                return;
+                insertado = true;
             } else {
                 actual = actual->der;
             }
@@ -64,3 +77,33 @@ void BST::crearNodo(int frecuencia, const string& ip) {
     }
 }
 
+void BST::recorridoInversoAux(NodoBST* nodo, vector<ResultadoTop>& resultado, int& contador, int N) {
+    if (nodo == nullptr || contador >= N) {
+        return;
+    }
+
+    recorridoInversoAux(nodo->der, resultado, contador, N);
+
+    if (contador >= N) {
+        return;
+    }
+
+    for (const string& ip : nodo->ips) {
+        if (contador >= N) break;
+        resultado.push_back({ip, nodo->frecuencia});
+        contador++;
+    }
+
+    recorridoInversoAux(nodo->izq, resultado, contador, N);
+}
+
+vector<ResultadoTop> BST::obtenerTopN(int N) {
+    vector<ResultadoTop> resultado;
+    if (raiz == nullptr || N <= 0) {
+        return resultado;
+    }
+
+    int contador = 0;
+    recorridoInversoAux(raiz, resultado, contador, N);
+    return resultado;
+}

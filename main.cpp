@@ -9,7 +9,7 @@
 #include <vector>
 
 /*
- *github https://github.com/uno21858/Situacion-problema-TC1031.602/tree/Linked_Lists
+ *github https://github.com/uno21858/Situacion-problema-TC1031.602/tree/BST
  */
 
 
@@ -97,11 +97,20 @@ int main() {
         }
     }
 
-    // implementación de obtener topN para luego
-    /*  
-    int N = 5; 
-    vector <ResultadoTop> obtenerTopN(int N);
-    */
+    cout << "\nTop 5 IPs con mas accesos." << endl;
+
+    const int TOP_N = 5;
+
+
+    vector<ResultadoTop> topIPs = bst.obtenerTopN(TOP_N);
+
+    cout << "\n=== Top " << TOP_N << " IPs con mas accesos ===" << endl;
+    for (const ResultadoTop& resultado : topIPs) {
+        cout << resultado.ip << "\n" << endl;
+        cout << resultado.frecuencia << "\n" << endl;
+    }
+
+    cout << "Programa finalizado." << endl;
 
 cout << "Programa finalizado." << endl;
     return 0;
