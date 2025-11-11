@@ -70,10 +70,6 @@ int main() {
             if (ip == ipActual) {
                 ++frecuencia; // misma IP, incrementar frecuencia
             } else {
-                // prueba para ver que se insertan bien
-                cout << "Insertando IP: " << ipActual
-                 << " con frecuencia: " << frecuencia << endl;
-                // borrar después si es necesario
 
                 NodoBST* nodo = bst.buscar(frecuencia); 
                 if (nodo != nullptr) {
