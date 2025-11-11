@@ -86,6 +86,8 @@ int main() {
                 frecuencia = 1;
             }
         }
+        cout << "Insertando IP: " << ipActual
+         << " con frecuencia: " << frecuencia << endl;
 
         NodoBST* nodo = bst.buscar(frecuencia);
         if (nodo != nullptr) {
