@@ -56,7 +56,6 @@ int main() {
         cout << endl;
     }
 
-    // pueden borrar mis comentarios mas tarde si quieren, es mi guía por mientras
     // aqui se implementan los logs ordenados por BST
     cout << "Construyendo BST para analisis de frecuencias..." << endl;
 
@@ -86,8 +85,6 @@ int main() {
                 frecuencia = 1;
             }
         }
-        cout << "Insertando IP: " << ipActual
-         << " con frecuencia: " << frecuencia << endl;
 
         NodoBST* nodo = bst.buscar(frecuencia);
         if (nodo != nullptr) {
@@ -101,7 +98,6 @@ int main() {
 
     const int TOP_N = 5;
 
-
     vector<ResultadoTop> topIPs = bst.obtenerTopN(TOP_N);
 
     cout << "\n=== Top " << TOP_N << " IPs con mas accesos ===" << endl;
@@ -109,8 +105,6 @@ int main() {
         cout << resultado.ip << "\n" << endl;
         cout << resultado.frecuencia << "\n" << endl;
     }
-
-    cout << "Programa finalizado." << endl;
 
 cout << "Programa finalizado." << endl;
     return 0;
