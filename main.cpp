@@ -4,7 +4,9 @@
 
 // main.cpp
 #include "LogsManager.h"
+#include "BST.h"
 #include <iostream>
+#include <vector>
 
 /*
  *github https://github.com/uno21858/Situacion-problema-TC1031.602/tree/Linked_Lists
@@ -54,6 +56,51 @@ int main() {
         cout << endl;
     }
 
-    cout << "Programa finalizado." << endl;
+    // pueden borrar mis comentarios mas tarde si quieren, es mi guía por mientras
+    // aqui se implementan los logs ordenados por BST
+    cout << "Construyendo BST para analisis de frecuencias..." << endl;
+
+    BST bst;
+
+    if (logsOrdenados.length() > 0) {
+        string ipActual = logsOrdenados.getAt(0).getIP(); 
+        int frecuencia = 1; // para empezar 
+
+        for (int i = 1; i < logsOrdenados.length(); ++i) {
+            string ip = logsOrdenados.getAt(i).getIP(); // 
+            if (ip == ipActual) {
+                ++frecuencia; // misma IP, incrementar frecuencia
+            } else {
+                // prueba para ver que se insertan bien
+                cout << "Insertando IP: " << ipActual
+                 << " con frecuencia: " << frecuencia << endl;
+                // borrar después si es necesario
+
+                NodoBST* nodo = bst.buscar(frecuencia); 
+                if (nodo != nullptr) {
+                    bst.actualizarNodo(nodo, ipActual);
+                } else {
+                    bst.crearNodo(frecuencia, ipActual);
+                }
+                ipActual = ip; // awui se cambia de ip, se reinicia
+                frecuencia = 1;
+            }
+        }
+
+        NodoBST* nodo = bst.buscar(frecuencia);
+        if (nodo != nullptr) {
+            bst.actualizarNodo(nodo, ipActual);
+        } else {
+            bst.crearNodo(frecuencia, ipActual);
+        }
+    }
+
+    // implementación de obtener topN para luego
+    /*  
+    int N = 5; 
+    vector <ResultadoTop> obtenerTopN(int N);
+    */
+
+cout << "Programa finalizado." << endl;
     return 0;
 }

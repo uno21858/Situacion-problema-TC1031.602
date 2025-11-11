@@ -19,6 +19,26 @@
         "string_view": "cpp",
         "typeinfo": "cpp",
         "variant": "cpp",
-        "cctype": "cpp"
+        "cctype": "cpp",
+        "__bit_reference": "cpp",
+        "__locale": "cpp",
+        "array": "cpp",
+        "bitset": "cpp",
+        "clocale": "cpp",
+        "cstdarg": "cpp",
+        "ctime": "cpp",
+        "deque": "cpp",
+        "ios": "cpp",
+        "iostream": "cpp",
+        "istream": "cpp",
+        "locale": "cpp",
+        "mutex": "cpp",
+        "optional": "cpp",
+        "print": "cpp",
+        "queue": "cpp",
+        "ratio": "cpp",
+        "stack": "cpp",
+        "streambuf": "cpp",
+        "vector": "cpp"
     }
 }

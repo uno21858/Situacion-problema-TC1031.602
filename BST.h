@@ -40,7 +40,7 @@ private:
 
 public:
     BST();
-    ~BST();
+    ~BST() = default;
 
     NodoBST* buscar(int frecuencia);
     void actualizarNodo(NodoBST* nodo, const string& ip);
