@@ -17,9 +17,9 @@ int main() {
     const int NUMERO_EQUIPO = 4;
     int contadorBusquedas = 0;
 
-    // 1. Car gar logs del archivo
-    cout << "Cargando logs desde bitacora2.txt..." << endl;
-    MyLinkedList<LogManager> logsOrdenados = LogManager::cargarLogs("bitacora2.txt");
+    // 1. Cargar logs del archivo
+    cout << "Cargando logs desde bitacora3.txt..." << endl;
+    MyLinkedList<LogManager> logsOrdenados = LogManager::cargarLogs("bitacora3.txt");
     cout << "Logs cargados: " << logsOrdenados.length() << " registros" << endl;
 
     // 2. Ordenar por IP
