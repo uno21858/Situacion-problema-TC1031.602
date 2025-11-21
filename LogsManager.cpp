@@ -3,11 +3,10 @@
 //
 
 #include "LogsManager.h"
-
 #include <fstream>
 #include <iostream>
 #include <sstream>
-
+#include <cstdio>
 
 using namespace std;
 
@@ -55,6 +54,15 @@ bool LogManager::compararPorIP(const LogManager &otro) const {
 
     return puerto < otro.puerto;
 }
+
+//O(1) //---------------------------------------------------------
+string LogManager::getIPSinPuerto() const {
+    size_t pos = ip.find(':');
+    if (pos != string::npos) {
+        return ip.substr(0, pos);
+    }
+    return ip;
+}//--------------------------------------------------------------------
 
 
 // Cargar logs desde un archivo usando linked list

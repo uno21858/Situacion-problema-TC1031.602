@@ -2,8 +2,6 @@
 // Created by Erick on 19/09/25.
 //
 
-
-
 #ifndef SITUACION_PROBLEMA_TC1031_602_LOGSMANAGER_H
 #define SITUACION_PROBLEMA_TC1031_602_LOGSMANAGER_H
 
@@ -21,7 +19,7 @@ private:
     string mensaje;
 
 public:
-    LogManager() = default; // por defecto DN-------
+    LogManager() = default; // por defecto
 
     LogManager(const string& linea);
 
@@ -30,6 +28,7 @@ public:
     int getDia() const {return dia;}
     string getHora() const {return hora;}
     string getIP() const {return ip;}
+    string getIPSinPuerto() const;//-----------------------------------
     int getPuerto() const {return puerto;}
     string getMensaje() const {return mensaje;}
 

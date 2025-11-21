@@ -7,8 +7,11 @@ add_executable(Situacion_problema_TC1031_602
         main.cpp
         LogsManager.h
         LogsManager.cpp
+        HashTable.cpp
+        HashTable.h
         BST.cpp
-        main_test_BST.cpp)
+        BST.h
+        MyLinkedList.h)
 
 
 # el cmkae list hace que puedas ejecutar el codigo con el boton de play
