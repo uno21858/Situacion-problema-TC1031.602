@@ -4,7 +4,7 @@ using namespace std;
 
 // los datos se toman de bitacora3.txt
 MyHashTable::MyHashTable() {
-    this->sizeA = 97; // tamaño inicial de la tabla hash
+    this->sizeA = 11; // tamaño inicial de la tabla hash
     this->size = 0; // número de elementos en la tabla hash
     this->table = new MyLinkedList<string>[sizeA]; // arreglo de listas enlazadas
 }
