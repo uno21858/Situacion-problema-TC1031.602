@@ -7,28 +7,46 @@
 
 using namespace std;
 
-// Mapa para convertir mes a número (para comparación cronológica)
-static const map<string, int> mesANumero = {
-    {"Jan", 1}, {"Feb", 2}, {"Mar", 3}, {"Apr", 4},
-    {"May", 5}, {"Jun", 6}, {"Jul", 7}, {"Aug", 8},
-    {"Sep", 9}, {"Oct", 10}, {"Nov", 11}, {"Dec", 12}
-};
-
-// Comparador para ordenar fechas cronológicamente
-bool FechaHora::operator<(const FechaHora& otra) const {
-    // Comparar por mes
-    int miMes = mesANumero.at(this->mes);
-    int otroMes = mesANumero.at(otra.mes);
-    if (miMes != otroMes) return miMes < otroMes;
-
-    // Si el mes es igual, comparar por día
-    if (this->dia != otra.dia) return this->dia < otra.dia;
-
-    // Si día es igual, comparar por hora
-    return this->hora < otra.hora;
+// Función auxiliar para convertir mes a número
+int mesANumero(const string& mes) {
+    switch(mes[0]) {
+        case 'J':
+            if (mes == "Jan") return 1;
+            else if (mes == "Jun") return 6;
+            else if (mes == "Jul") return 7;
+            break;
+        case 'F':
+            return 2; // Feb
+        case 'M':
+            if (mes == "Mar") return 3;
+            else return 5; // May
+        case 'A':
+            if (mes == "Apr") return 4;
+            else return 8; // Aug
+        case 'S':
+            return 9; // Sep
+        case 'O':
+            return 10; // Oct
+        case 'N':
+            return 11; // Nov
+        case 'D':
+            return 12; // Dec
+    }
+    return 0;
 }
 
-// Constructor - O(1)
+// Función para comparar dos FechaHora
+// Retorna true si fh1 es menor que fh2 (orden cronológico)
+bool compararFechaHora(const FechaHora& fh1, const FechaHora& fh2) {
+    int mes1 = mesANumero(fh1.mes);
+    int mes2 = mesANumero(fh2.mes);
+
+    if (mes1 != mes2) return mes1 < mes2;
+    if (fh1.dia != fh2.dia) return fh1.dia < fh2.dia;
+    return fh1.hora < fh2.hora;
+}
+
+// los datos se toman de bitacora3.txt
 MyHashTable::MyHashTable() {
     this->sizeA = 11; // tamaño inicial de la tabla hash
     this->size = 0;   // número de IPs únicas
@@ -60,8 +78,30 @@ void MyHashTable::put(const string& ip, const FechaHora& fechaHora) {
     MyNodoLL<HashEntry>* current = table[pos].head;
     while (current != nullptr) {
         if (current->data.ip == ip) {
-            // IP encontrada, insertar fecha en orden
-            insertarOrdenado(current->data.fechas, fechaHora);
+            // IP encontrada, insertar la fecha en orden cronológico
+            // Buscar la posición correcta para insertar
+            if (current->data.fechas.isEmpty() ||
+                compararFechaHora(fechaHora, current->data.fechas.first())) {
+                // Insertar al inicio
+                current->data.fechas.insertFirst(fechaHora);
+            } else if (!compararFechaHora(fechaHora, current->data.fechas.last())) {
+                // Insertar al final
+                current->data.fechas.insertLast(fechaHora);
+            } else {
+                // Buscar posición en medio
+                int posicion = 0;
+                MyNodoLL<FechaHora>* currentFecha = current->data.fechas.head;
+                while (currentFecha != nullptr) {
+                    if (compararFechaHora(fechaHora, currentFecha->data)) {
+                        current->data.fechas.insertAt(posicion, fechaHora);
+                        this->size++;
+                        return;
+                    }
+                    posicion++;
+                    currentFecha = currentFecha->next;
+                }
+            }
+            this->size++;
             return;
         }
         current = current->next;
@@ -134,29 +174,4 @@ void MyHashTable::rehashing() {
 
     // Liberar tabla vieja
     delete[] oldTable;
-}
-
-// Función auxiliar para insertar fecha en orden cronológico
-void insertarOrdenado(ListaFechaHora& lista, const FechaHora& nuevaFecha) {
-    // Si la lista está vacía o la nueva fecha va al inicio
-    if (lista.isEmpty() || nuevaFecha < lista.head->data) {
-        lista.insertFirst(nuevaFecha);
-        return;
-    }
-
-    // Buscar la posición correcta
-    MyNodoLL<FechaHora>* current = lista.head;
-    while (current->next != nullptr && current->next->data < nuevaFecha) {
-        current = current->next;
-    }
-
-    // Insertar después de current
-    MyNodoLL<FechaHora>* nuevoNodo = new MyNodoLL<FechaHora>(nuevaFecha);
-    nuevoNodo->next = current->next;
-    current->next = nuevoNodo;
-
-    // Actualizar tail si es necesario
-    if (nuevoNodo->next == nullptr) {
-        lista.tail = nuevoNodo;
-    }
 }
