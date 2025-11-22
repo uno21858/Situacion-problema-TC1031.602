@@ -9,7 +9,7 @@ using namespace std;
 MyHashTable::MyHashTable() {
     this->sizeA = 11; // tamaño inicial de la tabla hash
     this->size = 0; // número de elementos en la tabla hash
-    this->table = new ListaFechaHora[sizeA];
+    this->table = new ListaIPEntry[sizeA];  // Array de listas de IPEntry
 }
 
 MyHashTable::~MyHashTable() {
@@ -19,22 +19,45 @@ MyHashTable::~MyHashTable() {
 }
 
 
-void MyHashTable::put(const string& ip, const FechaHora& fechaHora) { 
-    int pos = getPos(ip); 
+void MyHashTable::put(const string& ip, const FechaHora& fechaHora) {
+    int pos = getPos(ip);
 
-    // Agregar la nueva FechaHora a la lista en la posición calculada 
-    table[pos].insertLast(fechaHora); 
-    this->size++; // Incrementar el contador total de entradas (IP-FechaHora) 
+    // Buscar si la IP ya existe en esta posición (manejar colisiones)
+    MyNodoLL<IPEntry>* current = table[pos].head;
+    while (current != nullptr) {
+        if (current->data.ip == ip) {
+            // IP encontrada, agregar la fecha a su lista
+            current->data.fechas.insertLast(fechaHora);
+            this->size++;
+            return;
+        }
+        current = current->next;
+    }
+
+    // IP no encontrada, crear nueva entrada
+    IPEntry nuevaEntrada;
+    nuevaEntrada.ip = ip;
+    nuevaEntrada.fechas.insertLast(fechaHora);
+    table[pos].insertLast(nuevaEntrada);
+    this->size++;
 } 
 
-// la lista de FechaHora asociadas a una IP 
-ListaFechaHora* MyHashTable::get(const string& key) { 
-    int pos = getPos(key); 
-    // Si la lista en table[pos] está vacía, significa que la IP no se encontró 
-    if (table[pos].isEmpty()) { 
-        return nullptr; // Indicar que no se encontró la IP 
+// la lista de FechaHora asociadas a una IP
+ListaFechaHora* MyHashTable::get(const string& key) {
+    int pos = getPos(key);
+
+    // Buscar la IP específica en esta posición
+    MyNodoLL<IPEntry>* current = table[pos].head;
+    while (current != nullptr) {
+        if (current->data.ip == key) {
+            // IP encontrada, devolver su lista de fechas
+            return &(current->data.fechas);
+        }
+        current = current->next;
     }
-    return &(table[pos]); // Devolver la dirección de la lista encontrada 
+
+    // IP no encontrada
+    return nullptr;
 }
 
 bool MyHashTable::isEmpty() {

@@ -1,6 +1,6 @@
 #ifndef MYHASHTABLE_H
 #define MYHASHTABLE_H
-#include "MyLinkedList.h" 
+#include "MyLinkedList.h"
 #include <string>
 #include <vector>
 
@@ -16,10 +16,18 @@ struct FechaHora {
 
 using ListaFechaHora = MyLinkedList<FechaHora>;
 
+// Estructura para manejar colisiones: guarda IP + sus fechas
+struct IPEntry {
+    string ip;
+    ListaFechaHora fechas;
+};
+
+using ListaIPEntry = MyLinkedList<IPEntry>;
+
 
 class MyHashTable{
     private:
-    ListaFechaHora* table;
+    ListaIPEntry* table;  // Ahora cada posición tiene una lista de IPEntry
     int size;
     int sizeA;
     int getPos(const string& key);

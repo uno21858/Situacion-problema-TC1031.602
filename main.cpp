@@ -10,7 +10,7 @@
 #include <vector>
 
 /*
- *github https://github.com/uno21858/Situacion-problema-TC1031.602/tree/BST
+ *github https://github.com/uno21858/Situacion-problema-TC1031.602/tree/Hash
  */
 
 
