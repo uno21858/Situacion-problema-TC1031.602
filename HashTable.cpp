@@ -3,7 +3,6 @@
 #include <iostream>
 #include <sstream>
 #include <cstddef>
-#include <map>
 
 using namespace std;
 
@@ -59,10 +58,12 @@ MyHashTable::~MyHashTable() {
     delete[] table;
 }
 
-// Función hash usando std::hash - O(1)
+// Función hash manual (método de multiplicación) - O(n) donde n = longitud de la string
 int MyHashTable::hashFunction(const string& key) {
-    size_t hashC = hash<string>{}(key);
-    int hashCode = static_cast<int>(hashC);
+    int hashCode = 0;
+    for (int i = 0; i < key.length(); i++) {
+        hashCode = hashCode * 31 + key[i];
+    }
     return abs(hashCode) % this->sizeA;
 }
 
