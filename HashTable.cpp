@@ -35,6 +35,7 @@ int mesANumero(const string& mes) {
     return 0;
 }
 
+
 // Función para comparar dos FechaHora
 // Retorna true si fh1 es menor que fh2 (orden cronológico)
 bool compararFechaHora(const FechaHora& fh1, const FechaHora& fh2) {
