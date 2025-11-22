@@ -1,6 +1,6 @@
 #ifndef MYHASHTABLE_H
 #define MYHASHTABLE_H
-#include "MyLinkedList.h" 
+#include "MyLinkedList.h"
 #include <string>
 #include <vector>
 
@@ -12,14 +12,25 @@ struct FechaHora {
     string hora;
     int puerto;
     string mensaje;
+
+    // Comparador para orden cronológico
+    bool operator<(const FechaHora& otra) const;
 };
 
 using ListaFechaHora = MyLinkedList<FechaHora>;
 
+// Estructura para almacenar IP + sus fechas (manejo de colisiones)
+struct HashEntry {
+    string ip;
+    ListaFechaHora fechas;
+};
+
+// Función auxiliar para insertar fecha en orden cronológico
+void insertarOrdenado(ListaFechaHora& lista, const FechaHora& nuevaFecha);
 
 class MyHashTable{
     private:
-    ListaFechaHora* table;
+    MyLinkedList<HashEntry>* table;  // Array de listas de pares (IP, fechas)
     int size;
     int sizeA;
     int getPos(const string& key);
@@ -32,11 +43,8 @@ class MyHashTable{
         ~MyHashTable();
         void put(const string& ip, const FechaHora& fechaHora);
         ListaFechaHora* get(const string& key);
-       // MyLinkedList<string>* get(string key);
         bool isEmpty();
         int getSize();
-      //  int hashFunction(const string& key);
-       // void loadFromFile(const string& filename);
 };
 
 #endif // MYHASHTABLE_H

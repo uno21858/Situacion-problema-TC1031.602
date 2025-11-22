@@ -5,113 +5,79 @@
 // main.cpp
 #include "LogsManager.h"
 #include "HashTable.h"
-#include "BST.h"
 #include <iostream>
-#include <vector>
+
+using namespace std;
 
 /*
- *github https://github.com/uno21858/Situacion-problema-TC1031.602/tree/BST
+ * github https://github.com/uno21858/Situacion-problema-TC1031.602/tree/Hash
  */
 
-
 int main() {
-    const int NUMERO_EQUIPO = 4;
-    int contadorBusquedas = 0;
-
     // 1. Cargar logs del archivo
     cout << "Cargando logs desde bitacora3.txt..." << endl;
-    MyLinkedList<LogManager> logsOrdenados = LogManager::cargarLogs("bitacora3.txt");
-    cout << "Logs cargados: " << logsOrdenados.length() << " registros" << endl;
+    MyLinkedList<LogManager> logs = LogManager::cargarLogs("bitacora3.txt");
+    cout << "Logs cargados: " << logs.length() << " registros\n" << endl;
 
-    // 2. Ordenar por IP
-    cout << "Ordenando logs por IP..." << endl;
-    LogManager::ordenarPorIP(logsOrdenados);
-
-    // 3. Guardar archivo ordenado
-    LogManager::guardarLogsOrdenadosIP(logsOrdenados, NUMERO_EQUIPO);
-    cout << "Listo\n" << endl;
-
-    // 4. Ciclo de búsquedas
-    char respuesta = 's';
-    while (respuesta == 's' || respuesta == 'S') {
-        string ipInicio, ipFin;
-
-        // Solicitar IPs
-        cout << "Ingrese IP inicial: ";
-        cin >> ipInicio;
-        cout << "Ingrese IP final: ";
-        cin >> ipFin;
-
-        // Buscar rango
-        MyLinkedList<LogManager> resultados = LogManager::buscarRangoIP(logsOrdenados, ipInicio, ipFin);
-
-        // Guardar resultados
-        contadorBusquedas++;
-        LogManager::guardarResultados(resultados, contadorBusquedas, NUMERO_EQUIPO);
-
-        cout << "\nResultados guardados (" << resultados.length() << " registros)" << endl;
-
-        // Preguntar si continuar
-        cout << "\nDesea realizar otra busqueda? (s/n): ";
-        cin >> respuesta;
-        cout << endl;
-    }
-
-
-    // 5. Construir tabla hash para resumen de IPs
-    cout << "\nConstruyendo tabla hash para resumen de IPs..." <<endl; //------------------
-    MyHashTable tablaIPs;//------------------
+    // 2. Construir tabla hash para resumen de IPs
+    cout << "Construyendo tabla hash para resumen de IPs..." << endl; //------------------
+    MyHashTable tablaIPs; //------------------
     //------------------
-    MyNodoLL<LogManager>* current = logsOrdenados.head; //------------------
+    MyNodoLL<LogManager>* current = logs.head; //------------------
     while (current != nullptr) { //------------------
         const LogManager& log = current->data; //------------------
-        std::string ip_sin_puerto = log.getIPSinPuerto(); // getter de LogManager //------------------
+        string ip_sin_puerto = log.getIPSinPuerto(); // getter de LogManager //------------------
         //------------------
+        // Crear estructura FechaHora //------------------
         FechaHora fh; //------------------
         fh.mes = log.getMes(); //------------------
         fh.dia = log.getDia(); //------------------
         fh.hora = log.getHora(); //------------------
+        fh.puerto = log.getPuerto(); //------------------
+        fh.mensaje = log.getMensaje(); //------------------
         //------------------
-        //  MyHashTable para agregar el registro //------------------
+        // Agregar a la tabla hash (se insertará en orden cronológico) //------------------
         tablaIPs.put(ip_sin_puerto, fh); //------------------
         //------------------
         current = current->next; //------------------
     } //------------------
-    std::cout << "Tabla hash construida." << std::endl; //------------------
-    // ------------------
+    cout << "Tabla hash construida con " << tablaIPs.getSize() << " IPs unicas.\n" << endl; //------------------
+    //------------------
 
-
-    // ---------------------
-    std::cout << "\n--- Consulta de informacion por IP ---" << std::endl; //------------------
+    // 3. Ciclo de consultas //------------------
+    cout << "--- Consulta de informacion por IP ---" << endl; //------------------
     int consultarOtraIP = 1; //------------------
+    //------------------
     while (consultarOtraIP == 1) { //------------------
-        std::string ip_a_buscar; //------------------
-        std::cout << "Ingrese la IP (sin puerto) a consultar: "; //------------------
-        std::cin >> ip_a_buscar; //------------------
+        string ip_a_buscar; //------------------
+        cout << "Ingrese la IP (sin puerto) a consultar: "; //------------------
+        cin >> ip_a_buscar; //------------------
         //------------------
-        //MyHashTable para buscar------------------
+        // Buscar en la tabla hash usando get() //------------------
         ListaFechaHora* fechas_hora_lista = tablaIPs.get(ip_a_buscar); //------------------
         //------------------
         if (fechas_hora_lista != nullptr) { //------------------
+            // Imprimir IP //------------------
+            cout << ip_a_buscar << endl; //------------------
             //------------------
-            std::cout << ip_a_buscar << std::endl;//IP------------------
+            // Imprimir fechas en orden cronológico //------------------
             MyNodoLL<FechaHora>* current_fh = fechas_hora_lista->head; //------------------
             while (current_fh != nullptr) { //------------------
                 const FechaHora& fh = current_fh->data; //------------------
                 // Imprime mes, dia, hora (como pide el ejemplo de salida) //------------------
-                std::cout << fh.mes << " " << fh.dia << " " << fh.hora << std::endl; //------------------
+                cout << fh.mes << " " << fh.dia << " " << fh.hora << endl; //------------------
                 current_fh = current_fh->next; //------------------
             } //------------------
         } else { //------------------
-            // un mensaje o dejarlo vacio //------------------
-            std::cout << "IP " << ip_a_buscar << " no encontrada en la bitacora." << std::endl; //------------------
+            cout << "IP " << ip_a_buscar << " no encontrada en la bitacora." << endl; //------------------
         } //------------------
         //------------------
-        std::cout << "\n¿Desea consultar otra IP? (1 para si, 0 para no): "; //------------------
-        std::cin >> consultarOtraIP; //------------------
+        cout << "\n¿Desea consultar otra IP? (1 para si, 0 para no): "; //------------------
+        cin >> consultarOtraIP; //------------------
+        cout << endl; //------------------
     } //------------------
     //------------------
 
-cout << "Programa finalizado." << endl;
+    cout << "Programa finalizado." << endl;
     return 0;
 }
