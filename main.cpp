@@ -1,7 +1,8 @@
 //
 // Created by Erick on 18/09/25.
-// main.cpp
+//
 
+// main.cpp
 #include "LogsManager.h"
 #include "HashTable.h"
 #include "BST.h"
@@ -57,7 +58,7 @@ int main() {
     }
 
 
-    // MyHashTable ---------------------
+    // 5. Construir tabla hash para resumen de IPs
     cout << "\nConstruyendo tabla hash para resumen de IPs..." <<endl; //------------------
     MyHashTable tablaIPs;//------------------
     //------------------
