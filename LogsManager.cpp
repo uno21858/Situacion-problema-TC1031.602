@@ -2,6 +2,7 @@
 // Created by Erick on 19/09/25.
 //
 
+// LogsManager.cpp
 #include "LogsManager.h"
 #include <fstream>
 #include <iostream>

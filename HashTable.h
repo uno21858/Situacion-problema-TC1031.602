@@ -1,3 +1,4 @@
+// HashTable.h
 #ifndef MYHASHTABLE_H
 #define MYHASHTABLE_H
 #include "MyLinkedList.h"

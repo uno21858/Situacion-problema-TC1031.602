@@ -2,6 +2,7 @@
 // Created by Erick on 19/09/25.
 //
 
+// LogsManager.h
 #ifndef SITUACION_PROBLEMA_TC1031_602_LOGSMANAGER_H
 #define SITUACION_PROBLEMA_TC1031_602_LOGSMANAGER_H
 
