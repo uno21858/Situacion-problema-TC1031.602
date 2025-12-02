@@ -58,7 +58,7 @@ MyHashTable::~MyHashTable() {
     delete[] table;
 }
 
-// Función hash manual (método de multiplicación) - O(n) donde n = longitud de la string
+// Función hash (método de multiplicación) - O(n) donde n = longitud de la string
 int MyHashTable::hashFunction(const string& key) {
     int hashCode = 0;
     for (int i = 0; i < key.length(); i++) {
